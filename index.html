@@ -901,13 +901,7 @@ a.btn:has(.dl-ico){display:inline-flex;align-items:center;gap:10px}
 /* interactive screens: all closed until tapped */
 .vx-demo:not(.vx-open) .vx-tile{flex:1 1 0!important}
 
-.vx-close{position:absolute;top:8px;right:8px;z-index:4;width:28px;height:28px;border-radius:50%;border:0;background:#000b;color:#fff;font:inherit;font-size:.8rem;font-weight:800;cursor:pointer;display:none;place-items:center}
-
-.vx-tile.is-on .vx-close{display:grid}
-
-.vx-tile.is-on .vx-scr{inset:40px 14px 50px}
-
-.vx-cap-hint{color:var(--ash);font-weight:600}
+.vx-tile.is-on .vx-cap-hint{color:var(--ash);font-weight:600}
 
 .vx-tile:not(.is-on):hover .vx-ico{transform:scale(1.12)}
 
@@ -921,6 +915,26 @@ a.btn:has(.dl-ico){display:inline-flex;align-items:center;gap:10px}
 }
 
 .vx-demo:not(.vx-open) .vx-hint{visibility:hidden}
+
+
+/* phones: no counter/arrows on top; translucent side buttons on the rail */
+.vx-rail{position:relative}
+
+.vx-sl{display:none}
+
+@media (max-width:760px){
+ .vx-nav{display:none!important}
+
+ .vx-sl{display:grid;place-items:center;position:absolute;top:50%;z-index:6;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(20,20,24,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font:inherit;font-size:1.5rem;font-weight:700;line-height:1;cursor:pointer;transition:opacity .25s,background .2s;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+
+ .vx-sl:active{background:rgba(212,243,63,.85);color:#000}
+
+ .vx-sl-l{left:6px}
+.vx-sl-r{right:6px}
+
+ .vx-sl.hide{opacity:0;pointer-events:none}
+
+}
 
 
 </style>
@@ -1986,7 +2000,7 @@ function home(d){
 function contact(d){var c=d.contact;
  return '<section id="contact" class="band band-lime" aria-labelledby="contact-h"><div class="wrap contact"><h2 id="contact-h" class="giant"><span class="line slide-in">'+E(c.line1)+'</span><span class="line slide-in-r">'+E(c.line2)+'</span></h2><p class="contact-copy">'+E(c.copy)+'</p><div class="actions">'+
  (c.buttons||[]).map(function(b){return a(b.url,b.style==='solid'?'btn':'btn btn-ghost',E(b.label))}).join('')+resumeBtn(d.site,'btn btn-ghost')+'</div></div></section>'}
-function resumeBtn(s,cls){return s&&s.resume?'<a class="'+cls+'" href="'+E(s.resume)+'" download="'+E(s.resumeFile||'Resume.pdf')+'" target="_blank" rel="noreferrer">'+'<svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>'+E(s.resumeLabel||'Download my resume')+'</span></a>':''}
+function resumeBtn(s,cls){return s&&s.resume?'<a class="'+cls+'" href="'+E(s.resume)+'" download="'+E(s.resumeFile||'Resume.pdf')+'" target="_blank" rel="noreferrer">'+'<span>'+E(s.resumeLabel||'Download my resume')+'</span><svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>':''}
 
 function about(d){var b=d.about,s=d.site;
  return '<div class="view" data-view="about" hidden><section class="wrap page-head"><h1 class="giant slide-in">'+E(b.title)+'</h1></section><section class="wrap about-grid"><p class="intro-label">'+E(b.label)+'</p><div class="about-copy"><p class="lead slide-in-r">'+(b.lead||'')+'</p>'+(b.paras||[]).map(function(p){return '<p>'+p+'</p>'}).join('')+'</div></section>'+
@@ -1997,11 +2011,11 @@ function about(d){var b=d.about,s=d.site;
 
 function demo(c){var m=c.demo;if(!m||m.show===false||!(m.tiles||[]).length)return '';
  var cmp=m.compare!==false;
- return '<div class="vx-demo vx-acc rise-in'+(cmp?'':' vx-solo')+'" data-mode="a" style="--acc:'+E(m.acc||'#5b3e9e')+'"><div class="vx-top">'+(cmp?'<div class="vx-toggle" role="group" aria-label="Compare"><button type="button" data-m="a" aria-pressed="true">'+E(m.a)+'</button><button type="button" data-m="b" aria-pressed="false">'+E(m.b)+'</button></div>':(m.title?'<p class="vx-solo-h">'+E(m.title)+'</p>':''))+'<span class="vx-hint">'+E(m.hint||'Tap a screen to try it')+'</span><span class="vx-nav"><button type="button" class="vx-arr" data-dir="-1" aria-label="Previous screen">‹</button><span class="vx-count"></span><button type="button" class="vx-arr" data-dir="1" aria-label="Next screen">›</button></span></div><div class="vx-tiles">'+
+ return '<div class="vx-demo vx-acc rise-in'+(cmp?'':' vx-solo')+'" data-mode="a" style="--acc:'+E(m.acc||'#5b3e9e')+'"><div class="vx-top">'+(cmp?'<div class="vx-toggle" role="group" aria-label="Compare"><button type="button" data-m="a" aria-pressed="true">'+E(m.a)+'</button><button type="button" data-m="b" aria-pressed="false">'+E(m.b)+'</button></div>':(m.title?'<p class="vx-solo-h">'+E(m.title)+'</p>':''))+'<span class="vx-hint">'+E(m.hint||'Tap a screen to try it')+'</span><span class="vx-nav"><button type="button" class="vx-arr" data-dir="-1" aria-label="Previous screen">‹</button><span class="vx-count"></span><button type="button" class="vx-arr" data-dir="1" aria-label="Next screen">›</button></span></div><div class="vx-rail"><button type="button" class="vx-sl vx-sl-l" data-dir="-1" aria-label="Scroll screens left">‹</button><button type="button" class="vx-sl vx-sl-r" data-dir="1" aria-label="Scroll screens right">›</button><div class="vx-tiles">'+
  m.tiles.map(function(t,i){var nm=t.nameB&&cmp?'<span class="vx-n-a">'+E(t.name)+'</span><span class="vx-n-b">'+E(t.nameB)+'</span>':E(t.name);
   return '<div class="vx-tile" data-t="'+E(t.id||('t'+i))+'" tabindex="0" style="background:'+E(t.tint||'linear-gradient(170deg,#1b1b22,#121216)')+'" data-a="'+E(t.capA)+'" data-b="'+E(t.capB)+'"><span class="vx-ico">'+E(t.ico)+'</span>'+
   '<div class="vx-scr vx-a '+E(t.classA||'')+'"'+(t.attrA?' '+E(t.attrA):'')+'>'+(t.htmlA||'')+'</div>'+(cmp?'<div class="vx-scr vx-b '+E(t.classB||'')+'">'+(t.htmlB||'')+'</div>':'')+'<span class="vx-name">'+nm+'</span></div>'}).join('')+
- '</div><p class="vx-cap" aria-live="polite"></p></div>'}
+ '</div></div><p class="vx-cap" aria-live="polite"></p></div>'}
 
 function casePage(p,next){var c=p.case||{};
  var stats=(c.stats||[]).length?'<dl class="stats vx-stats">'+c.stats.map(function(s){return '<div class="stat slide-in"><dt>'+E(s.t)+'</dt><dd>'+E(s.n)+'</dd></div>'}).join('')+'</dl>':'';
@@ -2062,11 +2076,15 @@ window.KS_wire=function(root){
   tiles.forEach(function(t){
    t.addEventListener('click',function(e){
     if(!t.classList.contains('is-on')){pick(t);return}
-    if(e.target.closest('.vx-close')||!e.target.closest('.vx-scr'))pick(null)});
+    if(!e.target.closest(INTERACTIVE))pick(null)});
    t.addEventListener('keydown',function(e){if(e.target===t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();pick(t.classList.contains('is-on')?null:t)}});
-   var x=document.createElement('button');x.type='button';x.className='vx-close';x.setAttribute('aria-label','Close screen');x.textContent='✕';t.appendChild(x);
   });
   pick(null);
+  // phones: translucent side buttons scroll the row (no opening)
+  var sls=all(d,'.vx-sl');
+  function slUpd(){if(!row)return;var max=row.scrollWidth-row.clientWidth-2;sls.forEach(function(b){var l=+b.dataset.dir<0;b.classList.toggle('hide',max<=0||(l?row.scrollLeft<=2:row.scrollLeft>=max))})}
+  sls.forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();row.scrollBy({left:(+b.dataset.dir)*row.clientWidth*0.6,behavior:'smooth'})})});
+  if(row){row.addEventListener('scroll',slUpd,{passive:true});window.addEventListener('resize',slUpd);setTimeout(slUpd,50);row.addEventListener('transitionend',slUpd)}
   all(d,'.vx-toggle button').forEach(function(b){b.addEventListener('click',function(){
    d.dataset.mode=b.dataset.m;all(d,'.vx-toggle button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});upd()})});
   // exclusive button groups: filters, panes, booking
