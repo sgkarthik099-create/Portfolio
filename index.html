@@ -316,7 +316,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 }
 
 /* project card hover/hold panel: lighter so the card colour shows through */
-.glimpse{background:linear-gradient(to top,rgba(0,0,0,.86) 0%,rgba(0,0,0,.62) 70%,rgba(0,0,0,.38) 100%)!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.glimpse{background:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.86) 60%,rgba(0,0,0,.72) 100%)!important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 
 @media (hover:none){
  .card{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
@@ -893,6 +893,36 @@ html.ka-on .tape-front,html.ka-on .tape-back{animation:none!important}
 }
 
 
+/* resume button icon */
+.btn .dl-ico{width:1.15em;height:1.15em;flex:none}
+
+a.btn:has(.dl-ico){display:inline-flex;align-items:center;gap:10px}
+
+/* interactive screens: all closed until tapped */
+.vx-demo:not(.vx-open) .vx-tile{flex:1 1 0!important}
+
+.vx-close{position:absolute;top:8px;right:8px;z-index:4;width:28px;height:28px;border-radius:50%;border:0;background:#000b;color:#fff;font:inherit;font-size:.8rem;font-weight:800;cursor:pointer;display:none;place-items:center}
+
+.vx-tile.is-on .vx-close{display:grid}
+
+.vx-tile.is-on .vx-scr{inset:40px 14px 50px}
+
+.vx-cap-hint{color:var(--ash);font-weight:600}
+
+.vx-tile:not(.is-on):hover .vx-ico{transform:scale(1.12)}
+
+.vx-ico{transition:opacity .3s,transform .25s}
+
+@media (max-width:760px){
+ .vx-demo:not(.vx-open) .vx-tile{flex:0 0 40%!important;height:300px}
+
+ .vx-demo:not(.vx-open) .vx-tile .vx-name{display:block;font-size:.72rem}
+
+}
+
+.vx-demo:not(.vx-open) .vx-hint{visibility:hidden}
+
+
 </style>
 <style id="theme-css"></style>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)}</script>
@@ -1060,14 +1090,18 @@ html.ka-on .tape-front,html.ka-on .tape-back{animation:none!important}
   "tools": [
    "Figma",
    "FigJam",
+   "Framer",
    "Adobe Creative Suite",
    "Canva",
    "Notion",
+   "Miro",
    "UXPressia",
    "Claude",
    "ChatGPT",
    "Google Ads",
-   "Meta Ads"
+   "Meta Ads",
+   "shadcn/ui",
+   "WordPress"
   ]
  },
  "projects": [
@@ -1952,7 +1986,7 @@ function home(d){
 function contact(d){var c=d.contact;
  return '<section id="contact" class="band band-lime" aria-labelledby="contact-h"><div class="wrap contact"><h2 id="contact-h" class="giant"><span class="line slide-in">'+E(c.line1)+'</span><span class="line slide-in-r">'+E(c.line2)+'</span></h2><p class="contact-copy">'+E(c.copy)+'</p><div class="actions">'+
  (c.buttons||[]).map(function(b){return a(b.url,b.style==='solid'?'btn':'btn btn-ghost',E(b.label))}).join('')+resumeBtn(d.site,'btn btn-ghost')+'</div></div></section>'}
-function resumeBtn(s,cls){return s&&s.resume?'<a class="'+cls+'" href="'+E(s.resume)+'" download="'+E(s.resumeFile||'Resume.pdf')+'" target="_blank" rel="noreferrer">'+E(s.resumeLabel||'Download my resume')+' ↓</a>':''}
+function resumeBtn(s,cls){return s&&s.resume?'<a class="'+cls+'" href="'+E(s.resume)+'" download="'+E(s.resumeFile||'Resume.pdf')+'" target="_blank" rel="noreferrer">'+'<svg class="dl-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>'+E(s.resumeLabel||'Download my resume')+'</span></a>':''}
 
 function about(d){var b=d.about,s=d.site;
  return '<div class="view" data-view="about" hidden><section class="wrap page-head"><h1 class="giant slide-in">'+E(b.title)+'</h1></section><section class="wrap about-grid"><p class="intro-label">'+E(b.label)+'</p><div class="about-copy"><p class="lead slide-in-r">'+(b.lead||'')+'</p>'+(b.paras||[]).map(function(p){return '<p>'+p+'</p>'}).join('')+'</div></section>'+
@@ -1965,7 +1999,7 @@ function demo(c){var m=c.demo;if(!m||m.show===false||!(m.tiles||[]).length)retur
  var cmp=m.compare!==false;
  return '<div class="vx-demo vx-acc rise-in'+(cmp?'':' vx-solo')+'" data-mode="a" style="--acc:'+E(m.acc||'#5b3e9e')+'"><div class="vx-top">'+(cmp?'<div class="vx-toggle" role="group" aria-label="Compare"><button type="button" data-m="a" aria-pressed="true">'+E(m.a)+'</button><button type="button" data-m="b" aria-pressed="false">'+E(m.b)+'</button></div>':(m.title?'<p class="vx-solo-h">'+E(m.title)+'</p>':''))+'<span class="vx-hint">'+E(m.hint||'Tap a screen to try it')+'</span><span class="vx-nav"><button type="button" class="vx-arr" data-dir="-1" aria-label="Previous screen">‹</button><span class="vx-count"></span><button type="button" class="vx-arr" data-dir="1" aria-label="Next screen">›</button></span></div><div class="vx-tiles">'+
  m.tiles.map(function(t,i){var nm=t.nameB&&cmp?'<span class="vx-n-a">'+E(t.name)+'</span><span class="vx-n-b">'+E(t.nameB)+'</span>':E(t.name);
-  return '<div class="vx-tile'+(i===0?' is-on':'')+'" data-t="'+E(t.id||('t'+i))+'" tabindex="0" style="background:'+E(t.tint||'linear-gradient(170deg,#1b1b22,#121216)')+'" data-a="'+E(t.capA)+'" data-b="'+E(t.capB)+'"><span class="vx-ico">'+E(t.ico)+'</span>'+
+  return '<div class="vx-tile" data-t="'+E(t.id||('t'+i))+'" tabindex="0" style="background:'+E(t.tint||'linear-gradient(170deg,#1b1b22,#121216)')+'" data-a="'+E(t.capA)+'" data-b="'+E(t.capB)+'"><span class="vx-ico">'+E(t.ico)+'</span>'+
   '<div class="vx-scr vx-a '+E(t.classA||'')+'"'+(t.attrA?' '+E(t.attrA):'')+'>'+(t.htmlA||'')+'</div>'+(cmp?'<div class="vx-scr vx-b '+E(t.classB||'')+'">'+(t.htmlB||'')+'</div>':'')+'<span class="vx-name">'+nm+'</span></div>'}).join('')+
  '</div><p class="vx-cap" aria-live="polite"></p></div>'}
 
@@ -2015,17 +2049,24 @@ window.KS_wire=function(root){
  function all(r,s){return [].slice.call(r.querySelectorAll(s))}
  all(root,'.vx-demo').forEach(function(d){
   var cap=d.querySelector('.vx-cap'), tiles=all(d,'.vx-tile');
-  function on(){return d.querySelector('.vx-tile.is-on')||tiles[0]}
-  function upd(){var t=on();cap.innerHTML=t.getAttribute('data-'+d.dataset.mode)||''}
+  function on(){return d.querySelector('.vx-tile.is-on')}
+  var hint=(d.querySelector('.vx-hint')||{}).textContent||'Tap a screen to try it';
+  function upd(){var t=on();cap.innerHTML=t?(t.getAttribute('data-'+d.dataset.mode)||''):'<span class="vx-cap-hint">👆 '+hint.replace(/</g,'&lt;')+'</span>'}
   var row=d.querySelector('.vx-tiles'),cnt=d.querySelector('.vx-count');
-  function centre(t){if(!row||row.scrollWidth<=row.clientWidth+2)return;setTimeout(function(){var x=t.offsetLeft-(row.clientWidth-t.offsetWidth)/2;row.scrollTo({left:Math.max(0,x),behavior:'smooth'})},260)}
-  function pick(t){tiles.forEach(function(x){x.classList.toggle('is-on',x===t)});upd();var i=tiles.indexOf(t);if(cnt)cnt.textContent=(i+1)+' / '+tiles.length;all(d,'.vx-arr').forEach(function(b){b.disabled=(+b.dataset.dir<0&&i===0)||(+b.dataset.dir>0&&i===tiles.length-1)});centre(t)}
-  all(d,'.vx-arr').forEach(function(b){b.addEventListener('click',function(){var i=tiles.indexOf(on())+(+b.dataset.dir);if(i>=0&&i<tiles.length)pick(tiles[i])})});
-  if(cnt){cnt.textContent='1 / '+tiles.length;var a0=d.querySelector('.vx-arr[data-dir="-1"]');if(a0)a0.disabled=true}
+  function centre(t){if(!t||!row||row.scrollWidth<=row.clientWidth+2)return;setTimeout(function(){var x=t.offsetLeft-(row.clientWidth-t.offsetWidth)/2;row.scrollTo({left:Math.max(0,x),behavior:'smooth'})},260)}
+  function pick(t){tiles.forEach(function(x){x.classList.toggle('is-on',x===t);x.setAttribute('aria-expanded',x===t)});d.classList.toggle('vx-open',!!t);upd();var i=tiles.indexOf(t);
+   if(cnt)cnt.textContent=i<0?tiles.length+' screens':(i+1)+' / '+tiles.length;
+   all(d,'.vx-arr').forEach(function(b){b.disabled=(+b.dataset.dir<0&&i<=0)||(+b.dataset.dir>0&&i===tiles.length-1)});centre(t)}
+  all(d,'.vx-arr').forEach(function(b){b.addEventListener('click',function(){var i=tiles.indexOf(on())+(+b.dataset.dir);if(i<0&&+b.dataset.dir>0)i=0;if(i>=0&&i<tiles.length)pick(tiles[i])})});
+  var INTERACTIVE='button,a,input,select,textarea,label,.vx-pin';
   tiles.forEach(function(t){
-   t.addEventListener('click',function(){if(!t.classList.contains('is-on')) pick(t)});
-   t.addEventListener('keydown',function(e){if(e.target===t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();pick(t)}});
+   t.addEventListener('click',function(e){
+    if(!t.classList.contains('is-on')){pick(t);return}
+    if(e.target.closest('.vx-close')||!e.target.closest('.vx-scr'))pick(null)});
+   t.addEventListener('keydown',function(e){if(e.target===t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();pick(t.classList.contains('is-on')?null:t)}});
+   var x=document.createElement('button');x.type='button';x.className='vx-close';x.setAttribute('aria-label','Close screen');x.textContent='✕';t.appendChild(x);
   });
+  pick(null);
   all(d,'.vx-toggle button').forEach(function(b){b.addEventListener('click',function(){
    d.dataset.mode=b.dataset.m;all(d,'.vx-toggle button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});upd()})});
   // exclusive button groups: filters, panes, booking
