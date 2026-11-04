@@ -884,17 +884,11 @@ html.ka-on .tape-front,html.ka-on .tape-back{animation:none!important}
 
 .next.next-tone:hover .next-label i{transform:translateX(6px)}
 
-/* home: each project card on its own grey panel (phones) */
-@media (max-width:680px){
- .grid>.card{background:#151518;border:1px solid #26262b;border-radius:calc(var(--radius) + 6px);padding:10px 10px 20px}
+/* phones: underline the project name while the card's panel is up */
+@media (hover:none){
+ .card .card-title{text-decoration:underline;text-decoration-color:transparent;text-decoration-thickness:2px;text-underline-offset:5px;transition:text-decoration-color .25s}
 
- .grid>.card .thumb{margin-bottom:14px}
-
- .grid>.card .card-title,.grid>.card .card-summary,.grid>.card .card-when{padding-inline:8px}
-
- .grid>.card-wide{background:none;border:0;padding:0}
-
- .grid>.card-wide .card-title,.grid>.card-wide .card-summary{padding-inline:0}
+ .card.peek .card-title{text-decoration-color:var(--lime)}
 
 }
 
@@ -2006,14 +2000,12 @@ function route(){var vs=views(),names=vs.map(function(v){return v.dataset.view})
  if(h==='admin')return;var view=names.indexOf(h)>-1?h:'home';if(names.indexOf(h)===-1&&h!=='home')target=document.getElementById(h);
  vs.forEach(function(v){v.hidden=v.dataset.view!==view});if(target){target.scrollIntoView()}else{window.scrollTo(0,0)}}
 window.addEventListener('hashchange',route);
-/* touch: hold a project card to slide up its panel, release to hide it */
-(function(){var t=null,held=false,card=null;
- function clear(){clearTimeout(t);if(card)card.classList.remove('peek');card=null}
- document.addEventListener('touchstart',function(e){var c=e.target.closest&&e.target.closest('#app .card');if(!c||!c.querySelector('.glimpse'))return;clear();held=false;card=c;t=setTimeout(function(){held=true;c.classList.add('peek')},220)},{passive:true});
- document.addEventListener('touchmove',function(){if(!held)clear()},{passive:true});
- document.addEventListener('touchend',function(){clearTimeout(t);if(card){var c=card;setTimeout(function(){c.classList.remove('peek')},60)}card=null},{passive:true});
- document.addEventListener('touchcancel',clear,{passive:true});
- document.addEventListener('click',function(e){if(held&&e.target.closest&&e.target.closest('#app .card')){e.preventDefault();held=false}},true);
+/* touch: while a finger is on a project card (tapping, holding or scrolling), slide up its panel */
+(function(){var card=null;
+ function off(){if(card){var c=card;setTimeout(function(){c.classList.remove('peek')},120)}card=null}
+ document.addEventListener('touchstart',function(e){var c=e.target.closest&&e.target.closest('#app .card');if(card&&card!==c)card.classList.remove('peek');if(!c)return;card=c;c.classList.add('peek')},{passive:true});
+ document.addEventListener('touchend',off,{passive:true});
+ document.addEventListener('touchcancel',off,{passive:true});
  document.addEventListener('contextmenu',function(e){if(e.target.closest&&e.target.closest('#app .card'))e.preventDefault()});
 })();
 window.KS={render:render,themeCss:themeCss,esc:E};
